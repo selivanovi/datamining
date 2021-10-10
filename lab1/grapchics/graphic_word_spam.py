@@ -5,11 +5,11 @@ import pandas as pd
 # Build graphics for length words and frequency
 
 # Read file spam_length_frequency
-spam_word_df = pd.read_csv(r'out\spam\spam_groupby_length_frequency.csv')
+spam_word_df = pd.read_csv(r'../out/spam/spam_groupby_length_frequency.csv')
 
 spam_word_df['Percent'] = (spam_word_df['Frequency'] / spam_word_df['Frequency'].sum()) * 100
 
-mean_spam_df = pd.read_csv(r'out\spam\spam_length_frequency.csv')
+mean_spam_df = pd.read_csv(r'../out/spam/spam_length_frequency.csv')
 # Create new concat df
 
 # Fonding mean from word length

@@ -4,11 +4,11 @@ import pandas as pd
 
 # Build graphics for sentence and frequency
 
-ham_sentence_df = pd.read_csv(r'out\ham\ham_sentence_frequency.csv')
+ham_sentence_df = pd.read_csv(r'../out/ham/ham_sentence_frequency.csv')
 
 ham_sentence_df['Percent'] = (ham_sentence_df['0'] / ham_sentence_df['0'].sum()) * 100
 
-mean_ham_df = pd.read_csv(r'out\ham\ham.csv')
+mean_ham_df = pd.read_csv(r'../out/ham/ham.csv')
 
 # Fonding mean from sentence length
 mean_sentence = round(mean_ham_df['Length'].mean())

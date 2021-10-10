@@ -4,7 +4,7 @@ import pandas as pd
 
 # Build graphics for common words
 # Read file ham_length_frequency
-spam_word_frequency_df = pd.read_csv(r'out\spam\spam_word_frequency.csv').sort_values('Frequency')
+spam_word_frequency_df = pd.read_csv(r'../out/spam/spam_word_frequency.csv').sort_values('Frequency')
 spam_word_frequency_df = spam_word_frequency_df.tail(20)
 
 index = np.arange(20)

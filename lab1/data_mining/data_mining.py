@@ -17,7 +17,7 @@ def get_letter_from_string(st):
 
 
 # Data processing
-df = pd.read_csv(r'res\sms-spam-corpus.csv', encoding='windows-1251')
+df = pd.read_csv(r'../res/sms-spam-corpus.csv', encoding='windows-1251')
 df = df.rename(columns={'v2': 'Sentence'})
 df['Sentence'] = df['Sentence'].str.lower()
 df['Sentence'] = df['Sentence'].apply(lambda x: get_letter_from_string(x))
@@ -36,7 +36,7 @@ ham_df = ham_df.value_counts('Length')
 ham_df.to_csv(r'out\ham\ham_sentence_frequency.csv')
 
 # Write file ham without stop words and with frequency and length
-hf = pd.read_csv(r'out\ham\ham.csv')
+hf = pd.read_csv(r'../out/ham/ham.csv')
 new_hf = hf['Sentence'].str.split(expand=True).stack().value_counts().reset_index()
 new_hf.columns = ['Word', 'Frequency']
 new_hf = new_hf[~new_hf['Word'].isin(vocab)]
@@ -51,7 +51,7 @@ new_hf.to_csv(r'out\ham\ham_groupby_length_frequency.csv', index=True)
 print(new_hf)
 
 # Write file spam without stop words and with frequency and length
-sf = pd.read_csv(r'out\spam\spam.csv')
+sf = pd.read_csv(r'../out/spam/spam.csv')
 new_sf = sf['Sentence'].str.split(expand=True).stack().value_counts().reset_index()
 new_sf.columns = ['Word', 'Frequency']
 new_sf = new_sf[~new_sf['Word'].isin(vocab)]

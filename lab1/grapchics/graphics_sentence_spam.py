@@ -4,13 +4,13 @@ import pandas as pd
 
 # Build graphics for sentence and frequency
 
-spam_sentence_df = pd.read_csv(r'out\spam\spam_sentence_frequency.csv')
+spam_sentence_df = pd.read_csv(r'../out/spam/spam_sentence_frequency.csv')
 
 
 spam_sentence_df['Percent'] = (spam_sentence_df['0'] / spam_sentence_df['0'].sum()) * 100
 
 
-mean_spam_df = pd.read_csv(r'out\spam\spam.csv')
+mean_spam_df = pd.read_csv(r'../out/spam/spam.csv')
 
 
 # Fonding mean from sentence length

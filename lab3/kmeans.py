@@ -1,25 +1,12 @@
 import random
-from tkinter import *
-from tkinter import filedialog
 
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
-import pylab
+from matplotlib import pyplot as plt
 
-
-class Data:
-    def __init__(self):
-        self.df = None
-        self.kmeans = None
-
-    def setData(self, df):
-        self.df = df
-
-    def setKMeans(self, kmeans):
-        self.kmeans = kmeans
-
+from classes import Data, KMeans
+from tkinter import *
+from tkinter import filedialog
 
 data = Data()
 
@@ -30,15 +17,19 @@ def openFile():
                                                      ("all files", "*.*")))
     pathInput.config(text=filepath)
 
-    data.setData(pd.DataFrame(np.loadtxt(filepath, dtype=int)))
+    data.set_data(pd.DataFrame(np.loadtxt(filepath, dtype=int)))
+    print(data.df)
 
 
 def buildGraphics():
     if checkFields():
         k = int(kInput.get())
+        X = data.df.iloc[:, [0, 1]].values
+        means = KMeans(n_clusters=k)
+        means.fit(X)
         colors = createColor(k)
-        buildKMeans(k, colors)
-        buildMeansDistance(k, colors)
+        buildKMeans(means)
+        buildWCSS(k)
         plt.show()
 
 
@@ -54,31 +45,39 @@ def randomColor():
     return random_color
 
 
-def buildKMeans(k, colors):
-    X = data.df.iloc[:, [0, 1]].values
-    means = KMeans(n_clusters=k, init='k-means++', random_state=42)
-    y_means = means.fit_predict(X)
+def buildKMeans(means):
     plt.subplot(2, 1, 1)
-    for i in range(k):
-        plt.scatter(X[y_means == i, 0], X[y_means == i, 1], s=1, c=colors[i], label=('Cluster ' + str(i)))
-    plt.scatter(means.cluster_centers_[:, 0], means.cluster_centers_[:, 1], s=50, c='yellow', label='Center')
+    for cluster in means.array_clusters:
+        build_cluster(cluster)
+    plt.scatter(means.get_clusters_x(), means.get_clusters_y(), s=50, c='yellow', label='Center')
     plt.title('KMeans')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.legend()
 
 
-def buildMeansDistance(k, colors):
+def build_cluster(cluster):
+    array_x = []
+    array_y = []
+    for point in cluster.array_points:
+        array_x.append(point.x)
+        array_y.append(point.y)
+    plt.scatter(array_x, array_y, s=1, c=randomColor())
+
+
+def buildWCSS(k):
     X = data.df.iloc[:, [0, 1]].values
-    means = KMeans(n_clusters=k)
-    y_means = means.fit_transform(X)
+    wcss = []
+    centroids = range(k)
     plt.subplot(2, 1, 2)
     for i in range(k):
-        mean = y_means[i].mean()
-        plt.bar(i + 1, mean, color=colors[i])
-    plt.title('Means')
+        means = KMeans(n_clusters=k)
+        means.fit(X)
+        wcss.append(means.getWCSS())
+    plt.plot(centroids, wcss)
+    plt.title('WCSS')
     plt.xlabel('Centroid')
-    plt.ylabel('Mean')
+    plt.ylabel('WCSS')
     plt.tight_layout()
 
 

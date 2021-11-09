@@ -47,8 +47,13 @@ def randomColor():
 def buildKMeans(points, clusters, k):
     plt.subplot(2, 1, 1)
     for i in range(k):
-        plt.scatter(points[points['cluster'] == i]['x'], points[points['cluster'] == i]['y'], s=1, c=randomColor())
-    plt.scatter(clusters['x'], clusters['y'], s=50, c='yellow')
+        plt.scatter(
+            points[points[2] == i][0],
+            points[points[2] == i][1],
+            s=1,
+            c=randomColor()
+        )
+    plt.scatter(clusters[:, 0], clusters[:, 1], s=50, c='yellow')
     plt.title('KMeans')
     plt.xlabel('X')
     plt.ylabel('Y')
@@ -68,14 +73,14 @@ def buildWCSS(k):
     X = data.df.iloc[:, [0, 1]].values
     wcss = []
     plt.subplot(2, 1, 2)
-    for i in range(1, k+1):
+    for i in range(1, k + 1):
         means = KMeans(n_clusters=i)
         means.fit(X)
         wcss.append(means.getSumOfSquareDistance())
 
     print(len(wcss))
-    print(len(range(1, k+1)))
-    plt.plot(range(1, k+1), wcss)
+    print(len(range(1, k + 1)))
+    plt.plot(range(1, k + 1), wcss)
     plt.title('WCSS')
     plt.xlabel('Centroid')
     plt.ylabel('WCSS')

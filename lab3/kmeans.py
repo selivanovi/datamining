@@ -27,8 +27,7 @@ def buildGraphics():
         X = data.df.iloc[:, [0, 1]].values
         means = KMeans(n_clusters=k)
         means.fit(X)
-        colors = createColor(k)
-        buildKMeans(means)
+        buildKMeans(means.points, means.clusters, k)
         buildWCSS(k)
         plt.show()
 
@@ -45,11 +44,11 @@ def randomColor():
     return random_color
 
 
-def buildKMeans(means):
+def buildKMeans(points, clusters, k):
     plt.subplot(2, 1, 1)
-    for cluster in means.array_clusters:
-        build_cluster(cluster)
-    plt.scatter(means.get_clusters_x(), means.get_clusters_y(), s=50, c='yellow', label='Center')
+    for i in range(k):
+        plt.scatter(points[points['cluster'] == i]['x'], points[points['cluster'] == i]['y'], s=1, c=randomColor())
+    plt.scatter(clusters['x'], clusters['y'], s=50, c='yellow')
     plt.title('KMeans')
     plt.xlabel('X')
     plt.ylabel('Y')
@@ -68,13 +67,15 @@ def build_cluster(cluster):
 def buildWCSS(k):
     X = data.df.iloc[:, [0, 1]].values
     wcss = []
-    centroids = range(k)
     plt.subplot(2, 1, 2)
-    for i in range(k):
-        means = KMeans(n_clusters=k)
+    for i in range(1, k+1):
+        means = KMeans(n_clusters=i)
         means.fit(X)
-        wcss.append(means.getWCSS())
-    plt.plot(centroids, wcss)
+        wcss.append(means.getSumOfSquareDistance())
+
+    print(len(wcss))
+    print(len(range(1, k+1)))
+    plt.plot(range(1, k+1), wcss)
     plt.title('WCSS')
     plt.xlabel('Centroid')
     plt.ylabel('WCSS')
